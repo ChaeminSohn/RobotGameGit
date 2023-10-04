@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCtrl : MonoBehaviour
 {
     bool running;
     bool jumping;
-    bool isBorder;
+    public bool isBorder;
     public float moveSpeed = 15.0f;
     public float jumpPower = 15.0f;
     public float XturnSpeed = 100.0f;
@@ -17,7 +18,7 @@ public class PlayerCtrl : MonoBehaviour
     private float eulerAngleY;
     private float turnLimitX = -80;
     private float turnLimitY = 50;
-    private float commandRange = 100.0f;
+    private float commandRange = 2.0f;
     private readonly float initHp = 100.0f;
     public float currHP;
 
@@ -29,6 +30,7 @@ public class PlayerCtrl : MonoBehaviour
     private RaycastHit slopehit;
     private Camera playerCamera;
     private RaycastHit hit;
+    public GameObject image_Fire;
 
 
 
@@ -45,7 +47,7 @@ public class PlayerCtrl : MonoBehaviour
         playerCamera = GetComponentInChildren<Camera>();
 
     }
-    void Start()
+    IEnumerator Start()
     {
         /*keyDictionary = new Dictionary<KeyCode, Action>
         {
@@ -55,10 +57,15 @@ public class PlayerCtrl : MonoBehaviour
           
         };*/
         tr = GetComponent<Transform>();
-        rb = GetComponent<Rigidbody>();
+        rb = gameObject.GetComponent<Rigidbody>();
         manager = GameManager.instance;
         FinishPoint.OnPlayerWin += this.OnPlayerWin;
         currHP = initHp;
+        XturnSpeed = 0.0f;
+        YturnSpeed = 0.0f;
+        yield return new WaitForSeconds(0.3f);
+        XturnSpeed = 100.0f;
+        YturnSpeed = 100.0f;
         Debug.Log("Game Start");
     }
 
@@ -69,7 +76,7 @@ public class PlayerCtrl : MonoBehaviour
         turn();
         //jump();
 
-        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * commandRange, Color.green);
+        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * commandRange * 50, Color.green);
 
 
         if (Input.anyKeyDown)
@@ -82,7 +89,7 @@ public class PlayerCtrl : MonoBehaviour
             {
                 Debug.Log("click");
                 if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward,
-                    out hit, commandRange, 1 << 9))
+                    out hit, commandRange * 50, 1 << 9))
                 {
                     Debug.Log("Start Ctrl" + hit.transform.name);
                     GameManager.instance.SetCtrl(hit.transform.gameObject);
@@ -112,6 +119,19 @@ public class PlayerCtrl : MonoBehaviour
         FreezeRotation();
         //TiltOnSlope();
         StopToWall();
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, commandRange * 50, LayerMask.GetMask("SpecialObject")))
+        {
+            switch (hit.transform.gameObject.tag)
+            {
+                case "FIRE":
+                    image_Fire.gameObject.SetActive(true);
+                    break;
+
+
+            }
+        }
+        else if(image_Fire.gameObject  != null)
+            image_Fire.gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -132,7 +152,7 @@ public class PlayerCtrl : MonoBehaviour
     {
         //Debug.DrawRay(transform.position + 3 * Vector3.up, transform.forward * 10, Color.green);
         //Debug.DrawRay(transform.position, -transform.up * 5, Color.blue);
-        isBorder = Physics.Raycast(transform.position + 3 * Vector3.up, transform.forward, 10, LayerMask.GetMask("Wall"));
+        isBorder = Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward ,commandRange, LayerMask.GetMask("Wall"));
     }
 
     void TiltOnSlope()
@@ -149,6 +169,7 @@ public class PlayerCtrl : MonoBehaviour
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
+        Vector3 moveDir = (Vector3.forward * v) + (Vector3.right * h);   
         Vector3 getVel = new Vector3(h, 0, v) * moveSpeed;
         Vector3 locVel = transform.InverseTransformDirection(getVel);
         locVel.x = h;
@@ -163,19 +184,21 @@ public class PlayerCtrl : MonoBehaviour
         else
          moveVector = new Vector3(hAxis, 0, vAxis).normalized/2;
         */
-        if (!isBorder || h <= 0)
+        if (!isBorder || v <= 0)
         {
             if (running && !jumping)
                 //transform.position += moveVector * 2 * moveSpeed * Time.deltaTime;
-                rb.velocity = transform.TransformDirection(locVel) * 2;
-            //tr.Translate((Vector3.forward * v + Vector3.right * h).normalized 
-            //* 2 * moveSpeed * Time.deltaTime, Space.Self);
+                //rb.velocity = getVel * 2;
+            //rb.velocity = transform.TransformDirection(locVel) * 2;
+            tr.Translate(moveDir.normalized *
+             2 * moveSpeed * Time.deltaTime);
             else
             {
                 //transform.position += moveVector * moveSpeed * Time.deltaTime;
-                //tr.Translate((Vector3.forward * v + Vector3.right * h).normalized
-                //* moveSpeed * Time.deltaTime, Space.Self);
-                rb.velocity = transform.TransformDirection(locVel);
+               tr.Translate(moveDir.normalized
+                * moveSpeed * Time.deltaTime);
+                //rb.velocity = transform.TransformDirection(locVel);
+               //rb.velocity = getVel;
             }
 
         }

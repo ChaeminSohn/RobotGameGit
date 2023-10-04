@@ -13,7 +13,7 @@ public class PushButtonCtrl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isActive = pairObject.gameObject.activeSelf;
+        isActive = pairObject.gameObject.activeSelf;    
         field = pairObject.transform.Find("ForceField");
     }
 

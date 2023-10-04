@@ -12,7 +12,8 @@ public class MainCamera : MonoBehaviour
 
     private void Start()
     {
-        camTr = GetComponent<Transform>();  
+        camTr = GetComponent<Transform>();
+       
     }
 
     void LateUpdate()

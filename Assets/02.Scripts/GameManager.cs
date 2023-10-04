@@ -17,6 +17,11 @@ public class GameManager : MonoBehaviour
     private Vector2 rectSize;
     private float width;
     public GameObject robot;
+    public GameObject locationImage;
+    public GameObject Player;
+    private GameObject moveSpot;
+
+
 
     void Awake()
     {
@@ -38,12 +43,21 @@ public class GameManager : MonoBehaviour
         //ctrl.Add(0);
         
         cam = Camera.main;
+        Player = GameObject.FindWithTag("PLAYER");
         robotPanel = GameObject.FindGameObjectWithTag("ROBOT_CNT")?.GetComponent<Image>().GetComponent<RectTransform>();
         rectSize = robotPanel.sizeDelta;
     }
 
     public void GiveCommand(System.String cmd)
     { 
+        if(cmd == "Move" && hit.collider.tag == "Ground")
+        {
+            if (moveSpot != null)
+                Destroy(moveSpot);
+            moveSpot = Instantiate(locationImage, hit.point, Quaternion.identity);
+            moveSpot.transform.LookAt(Player.transform.position);
+            Destroy(moveSpot, 2.0f);
+        }
         foreach(GameObject robot in ctrlRobots)
         {
             robot.GetComponent<RobotCtrl>()?.Command(cmd, hit.point);
