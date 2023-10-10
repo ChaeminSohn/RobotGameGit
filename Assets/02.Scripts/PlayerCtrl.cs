@@ -147,7 +147,7 @@ public class PlayerCtrl : MonoBehaviour
         }
         else if((collision.gameObject.tag == "Laser"))
         {
-            OnDamage();
+            OnDamage(1);
         }
     }
 

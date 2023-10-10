@@ -30,7 +30,7 @@ public class LaserCtrl : MonoBehaviour
         if (!coll.collider.CompareTag("DRONE"))
         {
             if (coll.collider.CompareTag("PLAYER"))
-                coll.collider.transform.GetComponent<PlayerCtrl>()?.OnDamage();
+                coll.collider.transform.GetComponent<PlayerCtrl>()?.OnDamage(1);
             ContactPoint cp = coll.GetContact(0);
             Quaternion rot = Quaternion.LookRotation(-cp.normal);
             GameObject spark = Instantiate(sparkEffect, cp.point, rot);
