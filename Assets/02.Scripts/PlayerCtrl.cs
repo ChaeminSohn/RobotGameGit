@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerCtrl : MonoBehaviour
 {
@@ -21,7 +22,8 @@ public class PlayerCtrl : MonoBehaviour
     private float commandRange = 2.0f;
     private readonly float initHp = 100.0f;
     public float currHP;
-
+    private RectTransform heartPanel;
+    private Vector2 rectSize_heart;
     private GameManager manager;
 
     private Transform tr;
@@ -60,6 +62,8 @@ public class PlayerCtrl : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
         manager = GameManager.instance;
         FinishPoint.OnPlayerWin += this.OnPlayerWin;
+        heartPanel = GameObject.FindGameObjectWithTag("HEART_CNT")?.GetComponent<Image>().GetComponent<RectTransform>();
+        rectSize_heart = heartPanel.sizeDelta + new Vector2(225.0f * 3, 0);
         currHP = initHp;
         XturnSpeed = 0.0f;
         YturnSpeed = 0.0f;
@@ -140,6 +144,10 @@ public class PlayerCtrl : MonoBehaviour
         {
             jumping = false;
             anim.SetBool("isJump", jumping);
+        }
+        else if((collision.gameObject.tag == "Laser"))
+        {
+            OnDamage();
         }
     }
 
@@ -254,8 +262,9 @@ public class PlayerCtrl : MonoBehaviour
         }
     }
 
-    public void OnDamage()
+    public void OnDamage(int dmg)
     {
+        rectSize_heart -= new Vector2(225.0f * dmg, 0);
         currHP -= 40.0f;
         if (currHP < 0)
             OnPlayerDie();

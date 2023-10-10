@@ -14,7 +14,9 @@ public class GameManager : MonoBehaviour
     GameObject player;
     Camera cam;
     private RectTransform robotPanel;
-    private Vector2 rectSize;
+ 
+    private Vector2 rectSize_robot;
+   
     private float width;
     public GameObject robot;
     public GameObject locationImage;
@@ -45,7 +47,9 @@ public class GameManager : MonoBehaviour
         cam = Camera.main;
         Player = GameObject.FindWithTag("PLAYER");
         robotPanel = GameObject.FindGameObjectWithTag("ROBOT_CNT")?.GetComponent<Image>().GetComponent<RectTransform>();
-        rectSize = robotPanel.sizeDelta;
+        rectSize_robot = robotPanel.sizeDelta;
+     
+
     }
 
     public void GiveCommand(System.String cmd)
@@ -70,15 +74,15 @@ public class GameManager : MonoBehaviour
         if (!ctrlRobots.Contains(robot))
         {
             ctrlRobots.Add(robot);
-            rectSize += new Vector2(225.0f, 0);
-            robotPanel.sizeDelta = rectSize;
+            rectSize_robot += new Vector2(225.0f, 0);
+            robotPanel.sizeDelta = rectSize_robot;
             Debug.Log("Start Control" + robot.name);
         }
         else
         {
             ctrlRobots.Remove(robot);
-            rectSize -= new Vector2(215.0f, 0);
-            robotPanel.sizeDelta = rectSize;
+            rectSize_robot -= new Vector2(215.0f, 0);
+            robotPanel.sizeDelta = rectSize_robot;
             //robot.GetComponent<RobotCtrl>()?.Command("Wait", Vector3.zero);
         }
     }
@@ -90,6 +94,7 @@ public class GameManager : MonoBehaviour
         Physics.Raycast(ray, out hit);
     }
 
+ 
     public void OnPlayerWin()
     {
 
