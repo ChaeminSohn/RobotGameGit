@@ -15,4 +15,11 @@ public class LaserGateCtrl : MonoBehaviour
     {
         
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("PLAYER")) {
+            collision.gameObject.GetComponent<PlayerCtrl>()?.OnDamage();
+        }
+    }
 }

@@ -32,14 +32,35 @@ public class PushButtonCtrl : MonoBehaviour
             {
                 pairObject.GetComponent<PortalCtrl>()?.Push();
             }
+
             else
-                pairObject.gameObject.SetActive(false);
+            {
+                if (isActive)
+                {
+                    pairObject.gameObject.SetActive(false);
+                    pairObject.GetComponent<Collider>().enabled = false;
+                }
+                else
+                {
+                    pairObject.gameObject.SetActive(true);
+                    pairObject.GetComponent<Collider>().enabled = true;
+                }
+            }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
         isPush = false;
-        pairObject.gameObject.SetActive(true);
+        if (isActive)
+        {
+            pairObject.gameObject.SetActive(true);
+            pairObject.GetComponent<Collider>().enabled = true;
+        }
+        else
+        {
+            pairObject.gameObject.SetActive(false);
+            pairObject.GetComponent<Collider>().enabled = false;
+        }
     }
 }

@@ -11,13 +11,10 @@ public class GameManager : MonoBehaviour
     public List<GameObject> ctrlRobots = new List<GameObject>();    
     public static GameManager instance = null;
     private RaycastHit hit;
-    GameObject player;
     Camera cam;
-    private RectTransform robotPanel;
- 
-    private Vector2 rectSize_robot;
+
    
-    private float width;
+
     public GameObject robot;
     public GameObject locationImage;
     public GameObject Player;
@@ -32,7 +29,12 @@ public class GameManager : MonoBehaviour
         else if (instance != null)
             Destroy(this.gameObject);
         DontDestroyOnLoad(this.gameObject);
-        
+        cam = Camera.main;
+        Player = GameObject.FindWithTag("PLAYER");
+        DontDestroyOnLoad(this.Player);
+        //DontDestroyOnLoad (this.cam);
+
+
     }
     void Start()
     {
@@ -44,10 +46,8 @@ public class GameManager : MonoBehaviour
         //robot = GameObject.Find("MiniRobot");
         //ctrl.Add(0);
         
-        cam = Camera.main;
-        Player = GameObject.FindWithTag("PLAYER");
-        robotPanel = GameObject.FindGameObjectWithTag("ROBOT_CNT")?.GetComponent<Image>().GetComponent<RectTransform>();
-        rectSize_robot = robotPanel.sizeDelta;
+       
+
      
 
     }
@@ -74,15 +74,13 @@ public class GameManager : MonoBehaviour
         if (!ctrlRobots.Contains(robot))
         {
             ctrlRobots.Add(robot);
-            rectSize_robot += new Vector2(225.0f, 0);
-            robotPanel.sizeDelta = rectSize_robot;
+
             Debug.Log("Start Control" + robot.name);
         }
         else
         {
             ctrlRobots.Remove(robot);
-            rectSize_robot -= new Vector2(215.0f, 0);
-            robotPanel.sizeDelta = rectSize_robot;
+
             //robot.GetComponent<RobotCtrl>()?.Command("Wait", Vector3.zero);
         }
     }
@@ -94,7 +92,14 @@ public class GameManager : MonoBehaviour
         Physics.Raycast(ray, out hit);
     }
 
- 
+    public void ChangeScene()
+    {
+        robots = robots = new List<GameObject>();
+        ctrlRobots = new List<GameObject>();
+        foreach (GameObject robot in GameObject.FindGameObjectsWithTag("ROBOT"))
+            robots.Add(robot);
+    
+    }
     public void OnPlayerWin()
     {
 

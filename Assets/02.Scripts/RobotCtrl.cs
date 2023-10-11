@@ -8,11 +8,12 @@ public class RobotCtrl : MonoBehaviour
 {
     RaycastHit hit;
     Position destination;
-    public GameObject image_Type;
+    //public GameObject image_Type;
     public Transform SkillPos;
     public GameObject SkillEffect;
     public Vector3 offset = new Vector3(0, 8.0f, 0);
     private GameObject flame;
+    public float drawRange = 10.0f;
     public enum State
     {
         WAIT, TRACE, MOVE, OPEN, CLOSED, SKILL
@@ -119,7 +120,7 @@ public class RobotCtrl : MonoBehaviour
     {
         while (isAlive)
         {
-            image_Type.transform.position = (robotTr.position + offset);
+            //image_Type.transform.position = (robotTr.position + offset);
             yield return new WaitForSeconds(0.3f);
 
             switch (state)
@@ -174,6 +175,7 @@ public class RobotCtrl : MonoBehaviour
                     break;
 
             }
+            Debug.DrawRay(SkillPos.transform.position, (robotTr.forward - robotTr.up) * drawRange, Color.green);
 
         }
     }
