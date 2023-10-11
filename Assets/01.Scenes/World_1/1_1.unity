@@ -8739,6 +8739,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2007824493, guid: 40ba9cb9fe9d97c4fb445ffc2f86e73d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2007824494, guid: 40ba9cb9fe9d97c4fb445ffc2f86e73d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2007824494, guid: 40ba9cb9fe9d97c4fb445ffc2f86e73d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2007824495, guid: 40ba9cb9fe9d97c4fb445ffc2f86e73d, type: 3}
+      propertyPath: m_Color.a
+      value: 0.23921569
+      objectReference: {fileID: 0}
     - target: {fileID: 9079107332394888306, guid: 40ba9cb9fe9d97c4fb445ffc2f86e73d, type: 3}
       propertyPath: m_Pivot.x
       value: 0
