@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class PortalCtrl : MonoBehaviour
 {
-    public int sceneNum;
     public List<GameObject> buttons;
     public GameObject effect;
     private bool isOpen = false;
@@ -48,7 +47,7 @@ public class PortalCtrl : MonoBehaviour
             if (other.gameObject.CompareTag("PLAYER"))
             {
                 Debug.Log("You Win!");
-                SceneManager.LoadScene(sceneNum + 1);
+                GameManager.instance.ChangeScene();
             }
         }
    

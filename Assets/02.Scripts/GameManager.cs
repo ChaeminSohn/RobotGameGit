@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> ctrlRobots = new List<GameObject>();    
     public static GameManager instance = null;
     private RaycastHit hit;
+    private int sceneNum = 0;
     Camera cam;
 
    
@@ -93,9 +95,11 @@ public class GameManager : MonoBehaviour
     }
 
     public void ChangeScene()
-    {
-        robots = robots = new List<GameObject>();
+    { 
+        SceneManager.LoadScene(++sceneNum);
+        robots = new List<GameObject>();
         ctrlRobots = new List<GameObject>();
+        HPCtrl.hp = 3;
         foreach (GameObject robot in GameObject.FindGameObjectsWithTag("ROBOT"))
             robots.Add(robot);
     

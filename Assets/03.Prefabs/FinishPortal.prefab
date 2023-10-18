@@ -129,10 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11ed2f166561b94085639b335546595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneNum: 1
-  buttons:
-  - {fileID: 0}
-  - {fileID: 0}
+  buttons: []
   effect: {fileID: 212326456641573988}
 --- !u!1 &4829630138022355464
 GameObject:

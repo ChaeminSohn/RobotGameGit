@@ -25,25 +25,28 @@ public class PushButtonCtrl : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        isPush = true;
-        if (type == RobotCtrl.Type.ALL || other.gameObject.GetComponent<RobotCtrl>()?.type == type)
+        if (other.CompareTag("ROBOT") || other.CompareTag("PLAYER"))
         {
-            if (pairObject.CompareTag("PORTAL"))
+            isPush = true;
+            if (type == RobotCtrl.Type.ALL || other.gameObject.GetComponent<RobotCtrl>()?.type == type)
             {
-                pairObject.GetComponent<PortalCtrl>()?.Push();
-            }
-
-            else
-            {
-                if (isActive)
+                if (pairObject.CompareTag("PORTAL"))
                 {
-                    pairObject.gameObject.SetActive(false);
-                    pairObject.GetComponent<Collider>().enabled = false;
+                    pairObject.GetComponent<PortalCtrl>()?.Push();
                 }
+
                 else
                 {
-                    pairObject.gameObject.SetActive(true);
-                    pairObject.GetComponent<Collider>().enabled = true;
+                    if (isActive)
+                    {
+                        pairObject.gameObject.SetActive(false);
+                        pairObject.GetComponent<Collider>().enabled = false;
+                    }
+                    else
+                    {
+                        pairObject.gameObject.SetActive(true);
+                        pairObject.GetComponent<Collider>().enabled = true;
+                    }
                 }
             }
         }
@@ -51,16 +54,19 @@ public class PushButtonCtrl : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        isPush = false;
-        if (isActive)
+        if (other.CompareTag("ROBOT") || other.CompareTag("PLAYER"))
         {
-            pairObject.gameObject.SetActive(true);
-            pairObject.GetComponent<Collider>().enabled = true;
-        }
-        else
-        {
-            pairObject.gameObject.SetActive(false);
-            pairObject.GetComponent<Collider>().enabled = false;
+            isPush = false;
+            if (isActive)
+            {
+                pairObject.gameObject.SetActive(true);
+                pairObject.GetComponent<Collider>().enabled = true;
+            }
+            else
+            {
+                pairObject.gameObject.SetActive(false);
+                pairObject.GetComponent<Collider>().enabled = false;
+            }
         }
     }
 }

@@ -681,10 +681,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f494112526241f4c960ba5f548b9d34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image_Type: {fileID: 0}
   SkillPos: {fileID: 6041106428346931280}
   SkillEffect: {fileID: 5766437851295132836, guid: 91f11aadad783e34f87f68d09a473bd4, type: 3}
   offset: {x: 0, y: 8, z: 0}
+  drawRange: 100
   state: 0
   type: 0
   button: {fileID: 0}

@@ -10,7 +10,6 @@ public class StartPointCtrl : MonoBehaviour
     {
         if(player == null)
         {
-            GameManager.instance.ChangeScene();
             player = GameObject.FindGameObjectWithTag("PLAYER");
             player.transform.position = transform.position;
         }

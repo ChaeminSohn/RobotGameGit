@@ -2,78 +2,45 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 3
+  serializedVersion: 8
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: LaserBeam
-  m_Shader: {fileID: 4800000, guid: 3289daec59b21094486f1ad2de48faa7, type: 3}
-  m_ShaderKeywords: []
+  m_Shader: {fileID: 4800000, guid: 26c98c54ac377044cbfc5c0bc5395fd4, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
   m_SavedProperties:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 2800000, guid: e2f0934064aca76439f6a952825c4bed, type: 3}
-          m_Scale: {x: 35, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _Noise
-        second:
-          m_Texture: {fileID: 2800000, guid: 2154916e2641f4244b8dc19353e984d9, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: e2f0934064aca76439f6a952825c4bed, type: 3}
+        m_Scale: {x: 35, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 2800000, guid: 2154916e2641f4244b8dc19353e984d9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
-      data:
-        first:
-          name: _DustScroll
-        second: 5
-      data:
-        first:
-          name: _NoiseScroll
-        second: -25
-      data:
-        first:
-          name: _DustScale
-        second: .100000001
-      data:
-        first:
-          name: _DepthFade
-        second: 1
-      data:
-        first:
-          name: _Gamma
-        second: 1
-      data:
-        first:
-          name: _EmissionGain
-        second: .375
-      data:
-        first:
-          name: _Transparency
-        second: 1
-      data:
-        first:
-          name: _ScrollX
-        second: 0
-      data:
-        first:
-          name: _ScrollY
-        second: 1
-      data:
-        first:
-          name: _EdgeFade
-        second: 1
-      data:
-        first:
-          name: _MainScroll
-        second: 10
+    - _DepthFade: 1
+    - _DustScale: 0.1
+    - _DustScroll: 5
+    - _EdgeFade: 1
+    - _EmissionGain: 0.375
+    - _Gamma: 1
+    - _MainScroll: 10
+    - _NoiseScroll: -25
+    - _ScrollX: 0
+    - _ScrollY: 1
+    - _Transparency: 1
     m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 0, b: 0, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []

@@ -15,6 +15,7 @@ TagManager:
   - FIRE
   - WIND
   - HEART_CNT
+  - WALL
   layers:
   - Default
   - TransparentFX

@@ -22,12 +22,12 @@ public class LaserCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnCollisionEnter(Collision coll)
     {
-        if (!coll.collider.CompareTag("DRONE"))
+        if (coll.collider.CompareTag("PLAYER") || coll.collider.CompareTag("Ground") || coll.collider.CompareTag("WALL"))
         {
             if (coll.collider.CompareTag("PLAYER"))
                 coll.collider.transform.GetComponent<PlayerCtrl>()?.OnDamage();

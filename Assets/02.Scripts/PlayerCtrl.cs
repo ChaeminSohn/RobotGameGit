@@ -5,6 +5,7 @@ using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerCtrl : MonoBehaviour
 {
@@ -107,9 +108,11 @@ public class PlayerCtrl : MonoBehaviour
                 manager.GiveCommand("Move");*/
             else if (Input.GetButton("RobotSkill"))
                 manager.GiveCommand("Skill");
-
-
-
+            else if (Input.GetButton("NextScene"))
+            {
+                Debug.Log("Change Scene");
+                GameManager.instance.ChangeScene();
+            }
         }
 
         Cursor.visible = false;
@@ -132,7 +135,7 @@ public class PlayerCtrl : MonoBehaviour
 
             }
         }
-        else if(image_Fire.gameObject  != null)
+        else if(image_Fire.gameObject != null)
             image_Fire.gameObject.SetActive(false);
     }
 
