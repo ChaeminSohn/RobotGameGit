@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using UnityEditor.UI;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class PushButtonCtrl : MonoBehaviour
     public GameObject pairObject;
     private Transform field;
     private bool isActive;
-    public bool isPush;
+    bool isPushed;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,12 +28,12 @@ public class PushButtonCtrl : MonoBehaviour
     {
         if (other.CompareTag("ROBOT") || other.CompareTag("PLAYER"))
         {
-            isPush = true;
+            isPushed = true;
             if (type == RobotCtrl.Type.ALL || other.gameObject.GetComponent<RobotCtrl>()?.type == type)
             {
                 if (pairObject.CompareTag("PORTAL"))
                 {
-                    pairObject.GetComponent<PortalCtrl>()?.Push();
+                    pairObject.GetComponent<PortalCtrl>()?.Triggered();
                 }
 
                 else
@@ -56,7 +57,7 @@ public class PushButtonCtrl : MonoBehaviour
     {
         if (other.CompareTag("ROBOT") || other.CompareTag("PLAYER"))
         {
-            isPush = false;
+            isPushed = false;
             if (isActive)
             {
                 pairObject.gameObject.SetActive(true);
@@ -68,5 +69,10 @@ public class PushButtonCtrl : MonoBehaviour
                 pairObject.GetComponent<Collider>().enabled = false;
             }
         }
+    }
+
+    public bool isPush()
+    {
+        return isPushed;
     }
 }

@@ -7,7 +7,6 @@ TagManager:
   - Ground
   - PLAYER
   - ROBOT
-  - DRONE_STOP_POINT
   - DRONE
   - BUTTON
   - PORTAL
@@ -16,6 +15,9 @@ TagManager:
   - WIND
   - HEART_CNT
   - WALL
+  - DRONE_STOP_POINT_180
+  - DRONE_STOP_POINT_90
+  - UI
   layers:
   - Default
   - TransparentFX
@@ -29,7 +31,7 @@ TagManager:
   - Robot
   - Button
   - SpecialObject
-  - 
+  - Ground
   - 
   - 
   - 

@@ -23,8 +23,9 @@ public class FireCtrl : MonoBehaviour
     {
         Debug.DrawRay(firePos.position, (playerTr.position - firePos.position), Color.red);
         Physics.Raycast(firePos.position, playerTr.position - firePos.position, out hit, 2.0f);
-        firePos.LookAt(playerTr.position);
+        firePos.LookAt(playerTr.position + (Vector3.up * 3 ));
         Instantiate(laser, firePos.position, firePos.rotation);
         
     }
+
 }

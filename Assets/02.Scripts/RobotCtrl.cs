@@ -14,6 +14,7 @@ public class RobotCtrl : MonoBehaviour
     public Vector3 offset = new Vector3(0, 8.0f, 0);
     private GameObject flame;
     public float drawRange = 10.0f;
+    public float moveSpeed;
     public enum State
     {
         WAIT, TRACE, MOVE, OPEN, CLOSED, SKILL
@@ -74,15 +75,24 @@ public class RobotCtrl : MonoBehaviour
                 state = State.WAIT;
                 break;
             case "Follow":
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+                robotTr.LookAt(pos);
                 state = State.TRACE;
+                agent.isStopped = false;
                 break;
             case "Move":
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+                robotTr.LookAt(pos);
                 state = State.MOVE;
                 agent.destination = pos;
                 break;
             case "Skill":
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+                robotTr.LookAt(pos);
                 state = State.SKILL;
-
                 break;
             case "Explode":
                 break;
@@ -147,9 +157,9 @@ public class RobotCtrl : MonoBehaviour
                     }
                     break;
                 case State.SKILL:
-                    agent.isStopped = true;
                     anim.SetBool(hashOpen, true);
-                    yield return new WaitForSeconds(1.0f);
+                    anim.SetBool(hashWalk, false);
+                    yield return new WaitForSeconds(2.0f);
                     UseSkill();
                     yield return new WaitForSeconds(3.0f);
 
@@ -160,16 +170,29 @@ public class RobotCtrl : MonoBehaviour
                     break;
                 case State.MOVE:
                     float MoveDistance = Vector3.Distance(agent.destination, robotTr.position);
-                    if (MoveDistance > 1.0f)
+                    if (MoveDistance > 20.0f)
                     {
                         anim.SetBool(hashWalk, true);
-                        agent.speed = (float)playerTr.GetComponent<PlayerCtrl>()?.moveSpeed * 2;
+                        agent.speed = moveSpeed * 3;
+                        agent.isStopped = false;
+                    }
+                    else if (MoveDistance > 10.0f)
+                    {
+                        anim.SetBool(hashWalk, true);
+                        agent.speed = moveSpeed * 2;
+                        agent.isStopped = false;
+                    }
+                    else if(MoveDistance > 1.0f)
+                    {
+                        anim.SetBool(hashWalk, true);
+                        agent.speed = moveSpeed;
                         agent.isStopped = false;
                     }
                     else
                     {
                         anim.SetBool(hashWalk, false);
                         agent.isStopped = true;
+                        agent.velocity = Vector3.zero;
                         agent.velocity = Vector3.zero;
                     }
                     break;

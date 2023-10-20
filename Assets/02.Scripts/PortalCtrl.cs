@@ -6,29 +6,32 @@ using UnityEngine.SceneManagement;
 
 public class PortalCtrl : MonoBehaviour
 {
-    public List<GameObject> buttons;
+    public List<GameObject> triggers;
     public GameObject effect;
     private bool isOpen = false;
     //int buttonCnt = 0;
     
-    // Start is called before the first frame update
     void Start()
     {
         effect.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public void Push()
+    public void Triggered()
     {
-        foreach(GameObject button in buttons)
+        foreach(GameObject trigger in triggers)
         {
-            if (button.GetComponent<PushButtonCtrl>()?.isPush == false)
-                return;
+            if (trigger.CompareTag("BUTTON"))
+            {
+                if (trigger.GetComponent<PushButtonCtrl>()?.isPush() == false)
+                    return;
+            }
+            else if (trigger.CompareTag("FIRE"))
+            {
+                if (trigger.GetComponent<TorchCtrl>()?.isLit() == false)
+                    return;
+            }
+           
         }
         Open();
     }
@@ -46,8 +49,8 @@ public class PortalCtrl : MonoBehaviour
         {
             if (other.gameObject.CompareTag("PLAYER"))
             {
-                Debug.Log("You Win!");
-                GameManager.instance.ChangeScene();
+                SceneManager.LoadScene("LoadingScene");
+                //GameManager.instance.ChangeScene();
             }
         }
    

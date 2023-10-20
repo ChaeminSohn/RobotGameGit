@@ -50,10 +50,10 @@ Material:
     - _BUILTIN_ZWriteControl: 0
     - _DotsNoiseScale: 30
     - _DotsSize: 0.9
-    - _Mask: 2.73
+    - _Mask: 3
     - _NoiseScale: 10
     m_Colors:
-    - _DotsColor: {r: 0, g: 0.5803, b: 2, a: 1}
+    - _DotsColor: {r: 0, g: 0.39143676, b: 1.3350785, a: 0}
     - _DotsColor_Blue: {r: 0, g: 0, b: 0, a: 0}
     - _DotsColr_Red: {r: 0, g: 0, b: 0, a: 0}
     - _DotsTiling: {r: 20, g: 20, b: 0, a: 0}

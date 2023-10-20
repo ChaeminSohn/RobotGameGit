@@ -28,6 +28,7 @@ public class DroneCtrl : MonoBehaviour
 
     float lerpTime = 1.0f;
     float currentTime = 0;
+    float turnDegree = 180.0f;
     
     // Start is called before the first frame update
     void Start()
@@ -38,7 +39,15 @@ public class DroneCtrl : MonoBehaviour
 
         StartCoroutine(DroneAction());
     }
+    IEnumerator CheckDroneState()
+    {
+        while (isRunning)
+        {
+            yield return new WaitForSeconds(0.3f);
 
+            float distance = Vector3.Distance(playerTr.position, droneTr.position);
+        }
+    }
     IEnumerator DroneAction()
     {
         while (isRunning) {
@@ -56,14 +65,14 @@ public class DroneCtrl : MonoBehaviour
                     break;
                 case State.FIRE:
                     transform.GetComponent<FireCtrl>()?.Fire();
-                    detectTime -= 5.0f;
+                    detectTime -= 2.0f;
                     state = State.DETECT;
                     break;
                 case State.TURN:
                     
                     currentRotation = droneTr.rotation;
                     targetEulerAngle = droneTr.rotation.eulerAngles;
-                    targetEulerAngle.y += (180.0f);
+                    targetEulerAngle.y += turnDegree;
                     targetRotation = Quaternion.Euler(targetEulerAngle);
                     scanner.gameObject.SetActive(false);
                     while (currentTime < lerpTime)
@@ -87,11 +96,16 @@ public class DroneCtrl : MonoBehaviour
     {
         switch (other.tag)
         {
-            case "DRONE_STOP_POINT":
+            case "DRONE_STOP_POINT_180":
                 isRunning = false;
-                //from.rotation = droneTr.rotation;
+                turnDegree = 180.0f;
                 state = State.TURN;
-                //droneTr.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
+                isRunning = true;
+                break;
+            case "DRONE_STOP_POINT_90":
+                isRunning = false;
+                turnDegree = 90.0f;
+                state = State.TURN;
                 isRunning = true;
                 break;
             case "WALL":
@@ -104,6 +118,12 @@ public class DroneCtrl : MonoBehaviour
                 state = State.DETECT;
                 detectTime = 0.0f;
                 break;
+            case "DRONE":
+                isRunning = false;
+                turnDegree = 180.0f;
+                state = State.TURN;
+                isRunning = true;
+                break;
         }
     }
 
@@ -113,7 +133,7 @@ public class DroneCtrl : MonoBehaviour
         {
             case "PLAYER":
                 detectTime += 0.1f;
-                if (detectTime >= 10.0f)
+                if (detectTime >= 3.0f)
                     state = State.FIRE;
                 break;
 

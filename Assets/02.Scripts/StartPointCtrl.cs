@@ -12,6 +12,7 @@ public class StartPointCtrl : MonoBehaviour
         {
             player = GameObject.FindGameObjectWithTag("PLAYER");
             player.transform.position = transform.position;
+            player.transform.rotation = transform.rotation;
         }
     }
 

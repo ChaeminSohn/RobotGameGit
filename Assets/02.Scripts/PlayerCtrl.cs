@@ -32,10 +32,9 @@ public class PlayerCtrl : MonoBehaviour
     private RaycastHit slopehit;
     private Camera playerCamera;
     private RaycastHit hit;
-    public GameObject image_Fire;
+    private GameObject canvas_UI;
 
-
-
+    bool condition = false;
 
     Dictionary<KeyCode, Action> keyDictionary;
 
@@ -47,7 +46,6 @@ public class PlayerCtrl : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rigid = gameObject.GetComponent<Rigidbody>();
         playerCamera = GetComponentInChildren<Camera>();
-
     }
     IEnumerator Start()
     {
@@ -94,8 +92,7 @@ public class PlayerCtrl : MonoBehaviour
                 if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward,
                     out hit, commandRange * 50, 1 << 9))
                 {
-                    Debug.Log("Start Ctrl" + hit.transform.name);
-                    GameManager.instance.SetCtrl(hit.transform.gameObject);
+                    manager.SetCtrl(hit.transform.gameObject);
                 }
             }
             else if (Input.GetMouseButtonDown(1))
@@ -111,7 +108,7 @@ public class PlayerCtrl : MonoBehaviour
             else if (Input.GetButton("NextScene"))
             {
                 Debug.Log("Change Scene");
-                GameManager.instance.ChangeScene();
+                SceneManager.LoadScene("LoadingScene");
             }
         }
 
@@ -129,14 +126,20 @@ public class PlayerCtrl : MonoBehaviour
             switch (hit.transform.gameObject.tag)
             {
                 case "FIRE":
-                    image_Fire.gameObject.SetActive(true);
+                    UIManager.instance.showFireImage();
+
                     break;
 
 
             }
+            condition = true;
         }
-        else if(image_Fire.gameObject != null)
-            image_Fire.gameObject.SetActive(false);
+        else if (condition == true)
+        {
+            UIManager.instance.noImage();
+            condition = false;
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -209,7 +212,7 @@ public class PlayerCtrl : MonoBehaviour
 
         }
 
-        anim.SetBool("isWalk", h == 0 && v == 0);
+        anim.SetBool("isWalk", !(h == 0 && v == 0));
         anim.SetBool("isRun", running && !jumping);
 
 

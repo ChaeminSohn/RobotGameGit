@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> ctrlRobots = new List<GameObject>();    
     public static GameManager instance = null;
     private RaycastHit hit;
-    private int sceneNum = 0;
+    public int sceneNum;
     Camera cam;
 
    
@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
     public GameObject locationImage;
     public GameObject Player;
     private GameObject moveSpot;
-
 
 
     void Awake()
@@ -40,18 +39,14 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        sceneNum = 2;
         //GameObject robotGroup = GameObject.Find("ROBOTS");
-        
         foreach(GameObject robot in GameObject.FindGameObjectsWithTag("ROBOT"))
             robots.Add(robot);
    
         //robot = GameObject.Find("MiniRobot");
         //ctrl.Add(0);
         
-       
-
-     
-
     }
 
     public void GiveCommand(System.String cmd)
@@ -77,7 +72,6 @@ public class GameManager : MonoBehaviour
         {
             ctrlRobots.Add(robot);
 
-            Debug.Log("Start Control" + robot.name);
         }
         else
         {
@@ -96,10 +90,11 @@ public class GameManager : MonoBehaviour
 
     public void ChangeScene()
     { 
-        SceneManager.LoadScene(++sceneNum);
+        sceneNum++;
         robots = new List<GameObject>();
         ctrlRobots = new List<GameObject>();
         HPCtrl.hp = 3;
+
         foreach (GameObject robot in GameObject.FindGameObjectsWithTag("ROBOT"))
             robots.Add(robot);
     

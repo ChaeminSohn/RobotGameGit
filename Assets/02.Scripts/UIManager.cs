@@ -5,11 +5,14 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject fire_image;
+    public static UIManager instance;
+    [SerializeField]
+    Image fireImage;
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (instance == null)
+            instance = this;
     }
 
     // Update is called once per frame
@@ -18,17 +21,22 @@ public class UIManager : MonoBehaviour
         
     }
 
+    public void OnButtonClick()
+    {
+
+    }
     public void showFireImage()
     {
-        if ( fire_image != null ) {
-            if (fire_image.gameObject.activeSelf)
-            {
-                fire_image.SetActive(false);
-            }
-            else
-            {
-                fire_image.SetActive(true);
-            }
+        if ( fireImage != null ) { 
+                fireImage.gameObject.SetActive(true);
+        }
+    }
+
+    public void noImage()
+    {
+        if (fireImage.gameObject.activeSelf)    
+        {
+            fireImage.gameObject.SetActive(false);
         }
     }
 }
