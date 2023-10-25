@@ -572,7 +572,6 @@ GameObject:
   - component: {fileID: 6078992220641636098}
   - component: {fileID: 6041106428349737062}
   - component: {fileID: 6041106428349737063}
-  - component: {fileID: 6041106428349737057}
   - component: {fileID: 6041106428349737058}
   - component: {fileID: 6041106428349737061}
   - component: {fileID: 6041106428349737059}
@@ -654,28 +653,6 @@ CapsuleCollider:
   m_Height: 2.7806494
   m_Direction: 1
   m_Center: {x: 0.00004196167, y: 1.1008428, z: -1.6263043e-19}
---- !u!64 &6041106428349737057
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6852010898815808952}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!95 &6041106428349737058
 Animator:
   serializedVersion: 5
@@ -709,7 +686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f494112526241f4c960ba5f548b9d34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkillPos: {fileID: 6041106428346931280}
+  SkillPos: {fileID: 6041106428346931281}
   SkillEffect: {fileID: 5766437851295132836, guid: 91f11aadad783e34f87f68d09a473bd4, type: 3}
   offset: {x: 0, y: 8, z: 0}
   drawRange: 100

@@ -7,10 +7,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(AudioSource))]
 public class PlayerCtrl : MonoBehaviour
 {
     bool running;
     bool jumping;
+    bool walking;
     public bool isBorder;
     public float moveSpeed = 15.0f;
     public float jumpPower = 15.0f;
@@ -33,6 +35,9 @@ public class PlayerCtrl : MonoBehaviour
     private Camera playerCamera;
     private RaycastHit hit;
     private GameObject canvas_UI;
+    public AudioClip walkSfx;
+    public AudioClip runSfx;
+    private new AudioSource audio;
 
     bool condition = false;
 
@@ -46,6 +51,7 @@ public class PlayerCtrl : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rigid = gameObject.GetComponent<Rigidbody>();
         playerCamera = GetComponentInChildren<Camera>();
+        audio = GetComponent<AudioSource>();
     }
     IEnumerator Start()
     {
@@ -60,7 +66,8 @@ public class PlayerCtrl : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
         manager = GameManager.instance;
         FinishPoint.OnPlayerWin += this.OnPlayerWin;
- 
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         currHP = initHp;
         XturnSpeed = 0.0f;
         YturnSpeed = 0.0f;
@@ -112,8 +119,7 @@ public class PlayerCtrl : MonoBehaviour
             }
         }
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+    
     }
 
     void FixedUpdate()
@@ -176,45 +182,70 @@ public class PlayerCtrl : MonoBehaviour
 
     void move()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        Vector3 moveDir = (Vector3.forward * v) + (Vector3.right * h);   
-        Vector3 getVel = new Vector3(h, 0, v) * moveSpeed;
-        Vector3 locVel = transform.InverseTransformDirection(getVel);
-        locVel.x = h;
-        locVel.y = 0;
-        locVel.z = v;
-        locVel *= moveSpeed;
-
-        running = Input.GetButton("Run");
-
-        /*if(!jumping)
-         moveVector = new Vector3(hAxis, 0, vAxis).normalized;
-        else
-         moveVector = new Vector3(hAxis, 0, vAxis).normalized/2;
-        */
-        if (!isBorder || v <= 0)
+        if (!GameManager.isPause)
         {
-            if (running && !jumping)
-                //transform.position += moveVector * 2 * moveSpeed * Time.deltaTime;
-                //rb.velocity = getVel * 2;
-            //rb.velocity = transform.TransformDirection(locVel) * 2;
-            tr.Translate(moveDir.normalized *
-             2 * moveSpeed * Time.deltaTime);
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            Vector3 moveDir = (Vector3.forward * v) + (Vector3.right * h);
+            Vector3 getVel = new Vector3(h, 0, v) * moveSpeed;
+            Vector3 locVel = transform.InverseTransformDirection(getVel);
+            locVel.x = h;
+            locVel.y = 0;
+            locVel.z = v;
+            locVel *= moveSpeed;
+
+            running = Input.GetButton("Run");
+            walking = !(h == 0 && v == 0);
+
+            /*if(!jumping)
+             moveVector = new Vector3(hAxis, 0, vAxis).normalized;
+            else
+             moveVector = new Vector3(hAxis, 0, vAxis).normalized/2;
+            */
+            if (!isBorder || v <= 0)
+            {
+                if (running && !jumping)
+                    //transform.position += moveVector * 2 * moveSpeed * Time.deltaTime;
+                    //rb.velocity = getVel * 2;
+                    //rb.velocity = transform.TransformDirection(locVel) * 2;
+                    tr.Translate(moveDir.normalized *
+                     2 * moveSpeed * Time.deltaTime);
+                else
+                {
+                    //transform.position += moveVector * moveSpeed * Time.deltaTime;
+                    tr.Translate(moveDir.normalized
+                     * moveSpeed * Time.deltaTime);
+                    //rb.velocity = transform.TransformDirection(locVel);
+                    //rb.velocity = getVel;
+                }
+
+            }
+            if (running && walking)
+            {
+                anim.SetBool("isRun", true);
+                if (!audio.isPlaying || audio.clip == walkSfx)
+                {
+                    audio.clip = runSfx;
+                    audio.Play();
+                }
+
+            }
+            else if (walking)
+            {
+                anim.SetBool("isWalk", true);
+                if (!audio.isPlaying || audio.clip == runSfx)
+                {
+                    audio.clip = walkSfx;
+                    audio.Play();
+                }
+            }
             else
             {
-                //transform.position += moveVector * moveSpeed * Time.deltaTime;
-               tr.Translate(moveDir.normalized
-                * moveSpeed * Time.deltaTime);
-                //rb.velocity = transform.TransformDirection(locVel);
-               //rb.velocity = getVel;
+                anim.SetBool("isWalk", false);
+                if (audio.isPlaying)
+                    audio.Stop();
             }
-
         }
-
-        anim.SetBool("isWalk", !(h == 0 && v == 0));
-        anim.SetBool("isRun", running && !jumping);
-
 
         //Ray ray = new Ray(transform.position, -transform.up);
         //if (Physics.Raycast(ray, out slopehit, 1.0f, 1 << 7))
@@ -225,17 +256,19 @@ public class PlayerCtrl : MonoBehaviour
 
     void turn()
     {
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
-        eulerAngleY += mouseX * XturnSpeed;
-        eulerAngleX -= mouseY * YturnSpeed;
-        mouseX = ClampAngle(mouseX, turnLimitX, turnLimitY);
-        //eulerAngleX = ClampAngle(eulerAngleX, turnLimitX, turnLimitY);
-        //transform.rotation = Quaternion.Euler(0, eulerAngleY, 0);
-        // headTr.rotation = Quaternion.Euler(eulerAngleX, 0, 0);
-        tr.Rotate(Vector3.up * mouseX * XturnSpeed * Time.deltaTime);
-        playerCamera.transform.Rotate(Vector3.left * mouseY * YturnSpeed * Time.deltaTime);
-
+        if (!GameManager.isPause)
+        {
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
+            eulerAngleY += mouseX * XturnSpeed;
+            eulerAngleX -= mouseY * YturnSpeed;
+            mouseX = ClampAngle(mouseX, turnLimitX, turnLimitY);
+            //eulerAngleX = ClampAngle(eulerAngleX, turnLimitX, turnLimitY);
+            //transform.rotation = Quaternion.Euler(0, eulerAngleY, 0);
+            // headTr.rotation = Quaternion.Euler(eulerAngleX, 0, 0);
+            tr.Rotate(Vector3.up * mouseX * XturnSpeed * Time.deltaTime);
+            playerCamera.transform.Rotate(Vector3.left * mouseY * YturnSpeed * Time.deltaTime);
+        }
         //tr.Rotate(Vector3.up * turnSpeed * Time.deltaTime * );
     }
 

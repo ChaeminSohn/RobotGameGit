@@ -1,5 +1,7 @@
+using DigitalRuby.LightningBolt;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -9,10 +11,10 @@ public class RobotCtrl : MonoBehaviour
     RaycastHit hit;
     Position destination;
     //public GameObject image_Type;
-    public Transform SkillPos;
+    public GameObject SkillPos;
     public GameObject SkillEffect;
     public Vector3 offset = new Vector3(0, 8.0f, 0);
-    private GameObject flame;
+    private GameObject skillEffect;
     public float drawRange = 10.0f;
     public float moveSpeed;
     public enum State
@@ -28,6 +30,7 @@ public class RobotCtrl : MonoBehaviour
     public Type type;
     private Transform robotTr;
     private Transform playerTr;
+    Vector3 skillDestination;
     private NavMeshAgent agent;
     private Animator anim;
     private bool isAlive = true;
@@ -91,6 +94,8 @@ public class RobotCtrl : MonoBehaviour
             case "Skill":
                 agent.isStopped = true;
                 agent.velocity = Vector3.zero;
+                SkillPos.transform.LookAt(pos);
+                skillDestination = pos;
                 robotTr.LookAt(pos);
                 state = State.SKILL;
                 break;
@@ -101,17 +106,15 @@ public class RobotCtrl : MonoBehaviour
 
     void UseSkill()
     {
-        Debug.Log("skill");
         switch (type)
         {
             case Type.RED:
-                Skill_Fire();
-                break;
+                ShowSkill(); break;
             case Type.GREEN:
-                Skill_Wind();
-                break;
+                ShowSkill(); break;
             case Type.YELLOW:
-                Skill_Electric();
+                ShowSkill(); break;
+            case Type.ALL:
                 break;
         }
         if (Physics.Raycast(robotTr.position, -robotTr.up, out hit, 10.0f) && hit.transform.CompareTag("BUTTON"))
@@ -163,7 +166,7 @@ public class RobotCtrl : MonoBehaviour
                     UseSkill();
                     yield return new WaitForSeconds(3.0f);
 
-                    Destroy(flame, .5f);
+                    Destroy(skillEffect, .5f);
                     anim.SetBool(hashOpen, false);
 
                     state = State.WAIT;
@@ -182,7 +185,7 @@ public class RobotCtrl : MonoBehaviour
                         agent.speed = moveSpeed * 2;
                         agent.isStopped = false;
                     }
-                    else if(MoveDistance > 1.0f)
+                    else if(MoveDistance > 2.0f)
                     {
                         anim.SetBool(hashWalk, true);
                         agent.speed = moveSpeed;
@@ -203,18 +206,12 @@ public class RobotCtrl : MonoBehaviour
         }
     }
 
-    void Skill_Fire()
+    void ShowSkill()
     {
-        flame = Instantiate(SkillEffect, SkillPos.position, SkillPos.rotation);
+        skillEffect = Instantiate(SkillEffect, SkillPos.transform.position, robotTr.rotation * Quaternion.Euler(new Vector3(-30,0,0)));
     }
 
-    void Skill_Wind()
-    {
 
-    }
-    void Skill_Electric()
-    {
 
-    }
 
 }

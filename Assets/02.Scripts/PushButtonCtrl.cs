@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using UnityEditor.UI;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class PushButtonCtrl : MonoBehaviour
 {
     public RobotCtrl.Type type;
@@ -11,20 +12,17 @@ public class PushButtonCtrl : MonoBehaviour
     private Transform field;
     private bool isActive;
     bool isPushed;
-    // Start is called before the first frame update
+    public AudioClip openSfx;
+    private new AudioSource audio;
     void Start()
     {
         isActive = pairObject.gameObject.activeSelf;    
         field = pairObject.transform.Find("ForceField");
+        audio = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
-
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("ROBOT") || other.CompareTag("PLAYER"))
         {
@@ -42,11 +40,13 @@ public class PushButtonCtrl : MonoBehaviour
                     {
                         pairObject.gameObject.SetActive(false);
                         pairObject.GetComponent<Collider>().enabled = false;
+                        audio.PlayOneShot(openSfx, 1.0f);
                     }
                     else
                     {
                         pairObject.gameObject.SetActive(true);
                         pairObject.GetComponent<Collider>().enabled = true;
+                        audio.PlayOneShot(openSfx, 1.0f);
                     }
                 }
             }
@@ -62,11 +62,13 @@ public class PushButtonCtrl : MonoBehaviour
             {
                 pairObject.gameObject.SetActive(true);
                 pairObject.GetComponent<Collider>().enabled = true;
+                audio.PlayOneShot(openSfx, 1.0f);
             }
             else
             {
                 pairObject.gameObject.SetActive(false);
                 pairObject.GetComponent<Collider>().enabled = false;
+                audio.PlayOneShot(openSfx, 1.0f);
             }
         }
     }

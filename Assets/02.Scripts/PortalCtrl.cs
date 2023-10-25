@@ -4,16 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(AudioSource))]
 public class PortalCtrl : MonoBehaviour
 {
     public List<GameObject> triggers;
     public GameObject effect;
     private bool isOpen = false;
+    public AudioClip portalSfx;
+    private new AudioSource audio;
     //int buttonCnt = 0;
-    
+
     void Start()
     {
         effect.SetActive(false);
+        audio = GetComponent<AudioSource>();    
     }
 
 
@@ -38,6 +42,7 @@ public class PortalCtrl : MonoBehaviour
     public void Open()
     {
         effect.SetActive (true);
+        audio.PlayOneShot(portalSfx,1.0f);
         isOpen = true;
       
     }
